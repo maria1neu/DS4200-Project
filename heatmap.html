@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    #vis.vega-embed {
+      width: 100%;
+      display: flex;
+    }
+
+    #vis.vega-embed details,
+    #vis.vega-embed details summary {
+      position: relative;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@6"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@6.1.0"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@7"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}}, "data": {"name": "data-d8dff2c6d55a44eec71de05e8ea0dd57"}, "mark": {"type": "rect"}, "encoding": {"color": {"field": "plays", "type": "quantitative"}, "tooltip": [{"field": "year", "type": "ordinal"}, {"field": "month", "type": "ordinal"}, {"field": "plays", "type": "quantitative"}], "x": {"field": "month", "sort": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], "type": "ordinal"}, "y": {"field": "year", "type": "ordinal"}}, "title": "listening activity by month and year", "$schema": "https://vega.github.io/schema/vega-lite/v6.1.0.json", "datasets": {"data-d8dff2c6d55a44eec71de05e8ea0dd57": [{"year": 2014.0, "month": "Aug", "plays": 141}, {"year": 2014.0, "month": "Dec", "plays": 509}, {"year": 2014.0, "month": "Jul", "plays": 581}, {"year": 2014.0, "month": "Nov", "plays": 518}, {"year": 2014.0, "month": "Oct", "plays": 237}, {"year": 2014.0, "month": "Sep", "plays": 581}, {"year": 2015.0, "month": "Apr", "plays": 4}, {"year": 2015.0, "month": "Aug", "plays": 705}, {"year": 2015.0, "month": "Feb", "plays": 145}, {"year": 2015.0, "month": "Jan", "plays": 498}, {"year": 2015.0, "month": "Jul", "plays": 25}, {"year": 2015.0, "month": "Jun", "plays": 595}, {"year": 2015.0, "month": "Mar", "plays": 46}, {"year": 2015.0, "month": "May", "plays": 91}, {"year": 2015.0, "month": "Nov", "plays": 70}, {"year": 2015.0, "month": "Oct", "plays": 238}, {"year": 2015.0, "month": "Sep", "plays": 122}, {"year": 2016.0, "month": "Aug", "plays": 27}, {"year": 2016.0, "month": "Dec", "plays": 511}, {"year": 2016.0, "month": "Jun", "plays": 20}, {"year": 2016.0, "month": "Mar", "plays": 5}, {"year": 2016.0, "month": "Nov", "plays": 549}, {"year": 2016.0, "month": "Oct", "plays": 207}, {"year": 2016.0, "month": "Sep", "plays": 462}, {"year": 2017.0, "month": "Apr", "plays": 520}, {"year": 2017.0, "month": "Aug", "plays": 806}, {"year": 2017.0, "month": "Dec", "plays": 631}, {"year": 2017.0, "month": "Feb", "plays": 489}, {"year": 2017.0, "month": "Jan", "plays": 177}, {"year": 2017.0, "month": "Jul", "plays": 472}, {"year": 2017.0, "month": "Jun", "plays": 103}, {"year": 2017.0, "month": "Mar", "plays": 624}, {"year": 2017.0, "month": "May", "plays": 277}, {"year": 2017.0, "month": "Nov", "plays": 460}, {"year": 2017.0, "month": "Oct", "plays": 536}, {"year": 2017.0, "month": "Sep", "plays": 388}, {"year": 2018.0, "month": "Apr", "plays": 679}, {"year": 2018.0, "month": "Aug", "plays": 822}, {"year": 2018.0, "month": "Dec", "plays": 801}, {"year": 2018.0, "month": "Feb", "plays": 939}, {"year": 2018.0, "month": "Jan", "plays": 809}, {"year": 2018.0, "month": "Jul", "plays": 556}, {"year": 2018.0, "month": "Jun", "plays": 440}, {"year": 2018.0, "month": "Mar", "plays": 1460}, {"year": 2018.0, "month": "May", "plays": 379}, {"year": 2018.0, "month": "Nov", "plays": 722}, {"year": 2018.0, "month": "Oct", "plays": 723}, {"year": 2018.0, "month": "Sep", "plays": 994}, {"year": 2019.0, "month": "Apr", "plays": 1762}, {"year": 2019.0, "month": "Aug", "plays": 900}, {"year": 2019.0, "month": "Dec", "plays": 1288}, {"year": 2019.0, "month": "Feb", "plays": 701}, {"year": 2019.0, "month": "Jan", "plays": 825}, {"year": 2019.0, "month": "Jul", "plays": 1248}, {"year": 2019.0, "month": "Jun", "plays": 1025}, {"year": 2019.0, "month": "Mar", "plays": 1463}, {"year": 2019.0, "month": "May", "plays": 1450}, {"year": 2019.0, "month": "Nov", "plays": 1390}, {"year": 2019.0, "month": "Oct", "plays": 1627}, {"year": 2019.0, "month": "Sep", "plays": 1750}, {"year": 2020.0, "month": "Apr", "plays": 1168}, {"year": 2020.0, "month": "Aug", "plays": 1272}, {"year": 2020.0, "month": "Dec", "plays": 1200}, {"year": 2020.0, "month": "Feb", "plays": 1476}, {"year": 2020.0, "month": "Jan", "plays": 1951}, {"year": 2020.0, "month": "Jul", "plays": 1369}, {"year": 2020.0, "month": "Jun", "plays": 864}, {"year": 2020.0, "month": "Mar", "plays": 1734}, {"year": 2020.0, "month": "May", "plays": 1115}, {"year": 2020.0, "month": "Nov", "plays": 943}, {"year": 2020.0, "month": "Oct", "plays": 579}, {"year": 2020.0, "month": "Sep", "plays": 769}, {"year": 2021.0, "month": "Apr", "plays": 917}, {"year": 2021.0, "month": "Aug", "plays": 965}, {"year": 2021.0, "month": "Dec", "plays": 1446}, {"year": 2021.0, "month": "Feb", "plays": 735}, {"year": 2021.0, "month": "Jan", "plays": 1304}, {"year": 2021.0, "month": "Jul", "plays": 1482}, {"year": 2021.0, "month": "Jun", "plays": 1328}, {"year": 2021.0, "month": "Mar", "plays": 873}, {"year": 2021.0, "month": "May", "plays": 766}, {"year": 2021.0, "month": "Nov", "plays": 1299}, {"year": 2021.0, "month": "Oct", "plays": 926}, {"year": 2021.0, "month": "Sep", "plays": 1097}, {"year": 2022.0, "month": "Apr", "plays": 1335}, {"year": 2022.0, "month": "Aug", "plays": 687}, {"year": 2022.0, "month": "Dec", "plays": 727}, {"year": 2022.0, "month": "Feb", "plays": 1772}, {"year": 2022.0, "month": "Jan", "plays": 1520}, {"year": 2022.0, "month": "Jul", "plays": 1171}, {"year": 2022.0, "month": "Jun", "plays": 784}, {"year": 2022.0, "month": "Mar", "plays": 1433}, {"year": 2022.0, "month": "May", "plays": 1036}, {"year": 2022.0, "month": "Nov", "plays": 530}, {"year": 2022.0, "month": "Oct", "plays": 580}, {"year": 2022.0, "month": "Sep", "plays": 572}, {"year": 2023.0, "month": "Apr", "plays": 1545}, {"year": 2023.0, "month": "Aug", "plays": 1150}, {"year": 2023.0, "month": "Dec", "plays": 759}, {"year": 2023.0, "month": "Feb", "plays": 918}, {"year": 2023.0, "month": "Jan", "plays": 1190}, {"year": 2023.0, "month": "Jul", "plays": 1257}, {"year": 2023.0, "month": "Jun", "plays": 1015}, {"year": 2023.0, "month": "Mar", "plays": 1289}, {"year": 2023.0, "month": "May", "plays": 1145}, {"year": 2023.0, "month": "Nov", "plays": 612}, {"year": 2023.0, "month": "Oct", "plays": 1971}, {"year": 2023.0, "month": "Sep", "plays": 1076}, {"year": 2024.0, "month": "Apr", "plays": 1084}, {"year": 2024.0, "month": "Aug", "plays": 1653}, {"year": 2024.0, "month": "Dec", "plays": 760}, {"year": 2024.0, "month": "Feb", "plays": 1000}, {"year": 2024.0, "month": "Jan", "plays": 935}, {"year": 2024.0, "month": "Jul", "plays": 958}, {"year": 2024.0, "month": "Jun", "plays": 1128}, {"year": 2024.0, "month": "Mar", "plays": 626}, {"year": 2024.0, "month": "May", "plays": 1066}, {"year": 2024.0, "month": "Nov", "plays": 1250}, {"year": 2024.0, "month": "Oct", "plays": 1406}, {"year": 2024.0, "month": "Sep", "plays": 1307}, {"year": 2025.0, "month": "Apr", "plays": 971}, {"year": 2025.0, "month": "Aug", "plays": 60}, {"year": 2025.0, "month": "Feb", "plays": 799}, {"year": 2025.0, "month": "Jan", "plays": 1287}, {"year": 2025.0, "month": "Jul", "plays": 853}, {"year": 2025.0, "month": "Jun", "plays": 887}, {"year": 2025.0, "month": "Mar", "plays": 1159}, {"year": 2025.0, "month": "May", "plays": 813}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>
