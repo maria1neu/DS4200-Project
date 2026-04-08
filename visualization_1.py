@@ -44,11 +44,15 @@ def plot_device_usage(df):
     plt.tight_layout()
     plt.show()
 
+    return device
+
 
 def main():
     df = load_final_data()
     df = clean_platform(df)
-    plot_device_usage(df)
+    plot_devices = plot_device_usage(df)
+
+    plot_devices.to_csv("Platform_usage.csv", index=False)
 
 if __name__ == "__main__":
     main()
