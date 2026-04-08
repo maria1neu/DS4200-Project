@@ -40,7 +40,7 @@ def combine_data(df1, df2, df3, df4):
     keep_cols = [
         "Time Stamp", "Track Name", "Artist Name", "Album Name",
         "Platform Type", "Reason Start", "Reason End",
-        "Skipped", "Shuffle"
+        "Skipped", "Shuffle", "Source"
     ]
 
     cleaned = []
@@ -60,13 +60,26 @@ def combine_data(df1, df2, df3, df4):
 
     return new_df 
 
-def get_months(df):
-    df["Time Stamp"] = pd.to_datetime(df["Time Stamp"], utc=True, errors="coerce")
-    df["Date"] = df["Time Stamp"].dt.strftime("%Y-%m-%d")
-    print(df["Date"].head())
+def clean_platform(df):
+    df["Platform Type"] = df["Platform Type"].fillna("").str.lower()
 
-def main(): 
+    def simplify(platform):
+        if "ios" in platform:
+            return "iOS"
+        elif "android" in platform:
+            return "Android"
+        elif "windows" in platform or "mac" in platform:
+            return "Desktop"
+        elif "web" in platform:
+            return "Web"
+        else:
+            return "Other"
 
+    df["Platform Clean"] = df["Platform Type"].apply(simplify)
+
+    return df
+
+def load_final_data():
     df1 = data_frame(DATA_1)  
     df2 = data_frame(DATA_2)
     df3 = data_frame(DATA_3) 
@@ -75,11 +88,23 @@ def main():
     df1 = column_rename(df1)
     df2 = column_rename(df2)  
     df3 = column_rename(df3)  
-    df4 = column_rename(df4)  
+    df4 = column_rename(df4) 
 
     final_df = combine_data(df1, df2, df3, df4)
-    print(final_df.shape)
-    print(final_df["Time Stamp"].head())
+    final_df = clean_platform(final_df)
+    final_df["Time Stamp"] = pd.to_datetime(final_df["Time Stamp"], utc=True, errors="coerce")
+    final_df["Date"] = final_df["Time Stamp"].dt.date
+    final_df["Hour"] = final_df["Time Stamp"].dt.hour
+
+    return final_df
+
+def main(): 
+
+    final_df = load_final_data()
+    print(final_df['Platform Clean'].unique())
+
+    final_df.to_csv("data.csv", index=False)
+
 
 if __name__ == '__main__':
     main()
