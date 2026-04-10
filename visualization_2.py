@@ -1,7 +1,8 @@
-import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
+import plotly.graph_objects as go
+import itertools
 from data import load_final_data
+
 
 def clean_platform(df):
     df["Platform Type"] = df["Platform Type"].fillna("").str.lower()
@@ -21,38 +22,71 @@ def clean_platform(df):
     df["Platform Clean"] = df["Platform Type"].apply(simplify)
     return df
 
+
 def main():
     df = load_final_data()
     df = clean_platform(df)
 
-    df["Time Stamp"] = pd.to_datetime(df["Date"]) + pd.to_timedelta(df["Hour"], unit="h") 
-    df["Day of Week"] = df["Time Stamp"].dt.day_name()  
+    df["Time Stamp"] = pd.to_datetime(df["Date"]) + pd.to_timedelta(df["Hour"], unit="h")
+    df["Day of Week"] = df["Time Stamp"].dt.day_name()
 
     week_days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-
-    unique_days = df[["Date", "Day of Week"]].drop_duplicates()
-
-    count = df.drop_duplicates("Date")[~df.drop_duplicates("Date")["Day of Week"].isin(week_days)].shape[0]
-
-    df["Is Weekend"] = ~df["Day of Week"].isin(week_days)
-
-    df.groupby("Is Weekend").size()
+    all_hours = list(range(24))
 
     df["Day of Week"] = pd.Categorical(
         df["Day of Week"],
         categories=week_days,
         ordered=True
-    )    
-    heatmap_data = df.groupby(["Day of Week", "Hour"]).size().unstack(fill_value=0)
+    )
 
-    plt.figure(figsize=(12,6))
-    sns.heatmap(heatmap_data, cmap="Blues")
+    heatmap_data = df.groupby(["Day of Week", "Hour"]).size().reset_index(name="count")
 
-    plt.title("Listening Activity by Hour and Day")
-    plt.xlabel("Hour")
-    plt.ylabel("Day of Week")
-    plt.tight_layout()
-    plt.show()
+    full_grid = pd.DataFrame(
+        list(itertools.product(week_days, all_hours)),
+        columns=["Day of Week", "Hour"]
+    )
+
+    heatmap_data = full_grid.merge(
+        heatmap_data,
+        on=["Day of Week", "Hour"],
+        how="left"
+    )
+
+    heatmap_data["count"] = heatmap_data["count"].fillna(0)
+
+    pivot_data = heatmap_data.pivot(
+        index="Day of Week",
+        columns="Hour",
+        values="count"
+    ).reindex(week_days)
+
+    fig = go.Figure(
+        data=go.Heatmap(
+            z=pivot_data.values,
+            x=all_hours,
+            y=week_days,
+            colorscale="Blues",
+            colorbar=dict(title="Count"),
+            hovertemplate="Day: %{y}<br>Hour: %{x}<br>Count: %{z}<extra></extra>"
+        )
+    )
+
+    fig.update_layout(
+        title="Listening Activity by Hour and Day",
+        xaxis_title="Hour",
+        yaxis_title="Day of Week",
+        width=1000,
+        height=500
+    )
+
+    fig.update_xaxes(
+        tickmode="array",
+        tickvals=all_hours,
+        ticktext=[str(h) for h in all_hours]
+    )
+
+    fig.write_html("heatmap_days.html")
+
 
 if __name__ == "__main__":
     main()
