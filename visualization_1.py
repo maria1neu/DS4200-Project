@@ -1,7 +1,7 @@
-import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
+import plotly.express as px
 from data import load_final_data
+
 
 def clean_platform(df):
     df["Platform Type"] = df["Platform Type"].fillna("").str.lower()
@@ -23,26 +23,30 @@ def clean_platform(df):
 
 
 def plot_device_usage(df):
-
     device = (
         df.groupby("Platform Clean")
         .size()
         .reset_index(name="count")
+        .sort_values("count", ascending=False)  # 🔥 highest → lowest
     )
 
-    plt.figure(figsize=(8,6))
-
-    sns.barplot(
-        data=device,
+    fig = px.bar(
+        device,
         x="Platform Clean",
-        y="count"
+        y="count",
+        title="Overall Platform Usage",
+        text="count"
     )
 
-    plt.title("Overall Platform Usage")
-    plt.xlabel("Platform")
-    plt.ylabel("Number of Plays")
-    plt.tight_layout()
-    plt.show()
+    fig.update_traces(textposition="outside")
+
+    fig.update_layout(
+        xaxis_title="Platform",
+        yaxis_title="Number of Plays"
+    )
+
+    # ✅ THIS is what you wanted
+    fig.write_html("platform_usage.html")
 
     return device
 
@@ -50,9 +54,10 @@ def plot_device_usage(df):
 def main():
     df = load_final_data()
     df = clean_platform(df)
-    plot_devices = plot_device_usage(df)
 
-    plot_devices.to_csv("Platform_usage.csv", index=False)
+    plot_devices = plot_device_usage(df)
+    plot_devices.to_csv("platform_usage.csv", index=False)
+
 
 if __name__ == "__main__":
     main()
