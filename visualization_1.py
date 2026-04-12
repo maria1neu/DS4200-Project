@@ -45,8 +45,8 @@ def plot_device_usage(df):
         yaxis_title="Number of Plays"
     )
 
-    # ✅ THIS is what you wanted
-    fig.write_html("platform_usage.html")
+    fig.write_image("platform_usage_bar.png")
+
 
     return device
 
@@ -56,7 +56,6 @@ def main():
     df = clean_platform(df)
 
     plot_devices = plot_device_usage(df)
-    plot_devices.to_csv("platform_usage.csv", index=False)
 
 
 if __name__ == "__main__":
