@@ -46,16 +46,16 @@ def plot_finals_vs_nonfinals(df):
         marker=dict(size=7)
     ))
     fig.update_layout(
-        title="Average Monthly Listening: Finals vs. Non-Finals Months Over Time",
-        xaxis_title="Year",
-        yaxis_title="Average Plays per Month",
-        legend_title="Period",
-        plot_bgcolor="#080810",
-        paper_bgcolor="#080810",
-        font=dict(color="#ddddf5"),
-        xaxis=dict(gridcolor="#28284a"),
-        yaxis=dict(gridcolor="#28284a"),
-    )
+    title="Average Monthly Listening: Finals vs. Non-Finals Months Over Time",
+    xaxis_title="Year",
+    yaxis_title="Average Plays per Month",
+    legend_title="Period",
+    plot_bgcolor="#ffffff",
+    paper_bgcolor="#ffffff",
+    font=dict(color="#000000"),
+    xaxis=dict(gridcolor="#dddddd"),
+    yaxis=dict(gridcolor="#dddddd"),
+)
     fig.write_html("linechart.html")
 
 if __name__ == "__main__":
