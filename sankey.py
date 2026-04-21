@@ -83,9 +83,7 @@ def plot_sankey(df):
     ))
     fig.update_layout(
     title_text="Listening Flow by Semester & Genre (with Spotify Skip Rate) — Red = Finals Periods",
-    font=dict(size=12, color="#ddddf5"),
-    paper_bgcolor="#080810",
-    plot_bgcolor="#080810",
+    font=dict(size=12),
 )
     fig.write_html("sankey_new.html")
 
