@@ -1,4 +1,3 @@
-# DS4200-Project
 # DS4200 – Spotify Listening History Visualization
 
 A data visualization project for DS4200 (Information Presentation & Visualization) at Northeastern University, exploring personal Spotify streaming history through interactive charts.
