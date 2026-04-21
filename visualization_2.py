@@ -65,16 +65,24 @@ def main():
             z=pivot_data.values,
             x=all_hours,
             y=week_days,
-            colorscale="Blues",
+            colorscale = [
+                [0, "#f0fff4"],
+                [0.2, "#c6f6d5"], 
+                [0.4, "#9ae6b4"],
+                [0.6, "#68d391"],
+                [0.8, "#38a169"],
+                [1, "#1db954"]    
+            ],
             colorbar=dict(title="Count"),
             hovertemplate="Day: %{y}<br>Hour: %{x}<br>Count: %{z}<extra></extra>"
         )
     )
 
     fig.update_layout(
-        title="Listening Activity by Hour and Day",
+        title="Listening Activity by Hour and Day Of The Week",
         xaxis_title="Hour",
         yaxis_title="Day of Week",
+        plot_bgcolor="#080810",
         width=1000,
         height=500
     )
