@@ -12,57 +12,71 @@ def load_data():
     df = combine_data(df1, df2, df3, df4)
 
     df["Time Stamp"] = pd.to_datetime(df["Time Stamp"], utc=True, errors="coerce")
+    df = df.dropna(subset=["Time Stamp"]).copy()
+
     df["month"] = df["Time Stamp"].dt.strftime("%b")
     df["year"] = df["Time Stamp"].dt.year
 
-    return df.dropna(subset=["Time Stamp"])
+    return df
 
 
 def plot_heatmap(df):
-    month_order = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    month_order = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-    agg = df.groupby(["year", "month"]).agg(
-        plays=("Track Name", "count"),
-        skip_rate=("Skipped", lambda x: round(x.fillna(0).astype(float).mean() * 100, 1))
-    ).reset_index()
+    # Keep only recent years with more complete data
+    df = df[df["year"] >= 2023].copy()
 
-    finals_months = ["May", "Dec"]
-    agg["is_finals"] = agg["month"].isin(finals_months)
+    agg = (
+        df.groupby(["year", "month"])
+        .agg(plays=("Track Name", "count"))
+        .reset_index()
+    )
 
-    base = (
+    chart = (
         alt.Chart(agg)
-        .mark_rect()
+        .mark_rect(stroke="white", strokeWidth=0.5)
         .encode(
-            x=alt.X("month:O", sort=month_order),
-            y=alt.Y("year:O"),
-            color=alt.Color("plays:Q", scale=alt.Scale(scheme="greens")),
-            tooltip=["year:O", "month:O", "plays:Q", "skip_rate:Q", "is_finals:N"]
+            x=alt.X(
+                "month:O",
+                sort=month_order,
+                title="Month",
+                axis=alt.Axis(labelAngle=0, labelFontSize=12, titleFontSize=14)
+            ),
+            y=alt.Y(
+                "year:O",
+                title="Year",
+                axis=alt.Axis(labelFontSize=12, titleFontSize=14)
+            ),
+            color=alt.Color(
+                "plays:Q",
+                title="Plays",
+                scale=alt.Scale(scheme="greens")
+            ),
+            tooltip=[
+                alt.Tooltip("year:O", title="Year"),
+                alt.Tooltip("month:O", title="Month"),
+                alt.Tooltip("plays:Q", title="Number of Plays", format=",")
+            ]
         )
-        .properties(title="listening activity by month & year (skip rate % shown in cells)")
+        .properties(
+            title="Monthly Listening Volume by Year",
+            width=700,
+            height=300
+        )
+        .configure_title(
+            fontSize=22,
+            anchor="start"
+        )
+        .configure_axis(
+            labelColor="black",
+            titleColor="black"
+        )
+        .configure_view(
+            stroke=None
+        )
     )
 
-    # overlay red border on finals months to highlight academic stress periods
-    finals_overlay = (
-        alt.Chart(agg[agg["is_finals"]])
-        .mark_rect(filled=False, stroke="red", strokeWidth=2)
-        .encode(
-            x=alt.X("month:O", sort=month_order),
-            y=alt.Y("year:O"),
-        )
-    )
-
-    # show skip rate as text inside each cell so Spotify can see engagement level
-    skip_text = (
-        alt.Chart(agg)
-        .mark_text(fontSize=8, color="white")
-        .encode(
-            x=alt.X("month:O", sort=month_order),
-            y=alt.Y("year:O"),
-            text=alt.Text("skip_rate:Q", format=".0f")
-        )
-    )
-
-    chart = base + finals_overlay + skip_text
     chart.save("heatmap.html")
 
 
