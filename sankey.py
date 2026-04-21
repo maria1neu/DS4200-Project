@@ -41,12 +41,30 @@ def add_genres(df):
 
 
 def plot_sankey(df):
-    month_order = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    finals_months = ["May", "Dec"]
+    semester_map = {
+        "Jan": "Spring Semester",
+        "Feb": "Spring Semester",
+        "Mar": "Spring Semester",
+        "Apr": "Spring Finals",
+        "May": "Spring Finals",
+        "Jun": "Summer",
+        "Jul": "Summer",
+        "Aug": "Summer",
+        "Sep": "Fall Semester",
+        "Oct": "Fall Semester",
+        "Nov": "Fall Finals",
+        "Dec": "Fall Finals",
+    }
+
+    finals_groups = {"Spring Finals", "Fall Finals"}
+    semester_order = ["Spring Semester", "Spring Finals", "Summer", "Fall Semester", "Fall Finals"]
+
+    df = df.copy()
+    df["semester"] = df["month"].map(semester_map)
 
     agg = (
         df[df["genre"] != "unknown"]
-        .groupby(["month", "genre"])
+        .groupby(["semester", "genre"])
         .size()
         .reset_index(name="plays")
     )
@@ -54,26 +72,28 @@ def plot_sankey(df):
     top_genres = agg.groupby("genre")["plays"].sum().nlargest(8).index.tolist()
     agg = agg[agg["genre"].isin(top_genres)]
 
+    agg["semester"] = pd.Categorical(agg["semester"], categories=semester_order, ordered=True)
+    agg = agg.sort_values("semester")
+
     skip_df = (
         df[df["genre"].isin(top_genres)]
         .groupby("genre")
         .apply(lambda x: round(x["Skipped"].fillna(0).astype(float).mean() * 100, 1), include_groups=False)
         .reset_index(name="skip_rate")
     )
-
     skip_map = dict(zip(skip_df["genre"], skip_df["skip_rate"]))
     genre_labels = [f"{g} ({skip_map.get(g, '?')}% skipped)" for g in top_genres]
     genre_label_map = dict(zip(top_genres, genre_labels))
 
-    months = [m for m in month_order if m in agg["month"].values]
-    nodes = months + genre_labels
+    semesters = [s for s in semester_order if s in agg["semester"].values]
+    nodes = semesters + genre_labels
     node_idx = {n: i for i, n in enumerate(nodes)}
 
     node_colors = []
     for n in nodes:
-        if n in finals_months:
+        if n in finals_groups:
             node_colors.append("rgba(255, 80, 80, 0.8)")
-        elif n in months:
+        elif n in semester_order:
             node_colors.append("rgba(29, 185, 84, 0.8)")
         else:
             node_colors.append("rgba(150, 150, 150, 0.6)")
@@ -86,14 +106,14 @@ def plot_sankey(df):
             thickness=20
         ),
         link=dict(
-            source=[node_idx[m] for m in agg["month"]],
+            source=[node_idx[s] for s in agg["semester"]],
             target=[node_idx[genre_label_map[g]] for g in agg["genre"]],
             value=agg["plays"].tolist()
         )
     ))
 
     fig.update_layout(
-        title_text="Listening Flow by Month & Genre (with Spotify Skip Rate) — Red = Finals Months",
+        title_text="Listening Flow by Semester & Genre (with Spotify Skip Rate) — Red = Finals Periods",
         font=dict(size=12)
     )
     fig.write_html("sankey_new.html")
